@@ -20,7 +20,7 @@ get_header();
               'permalink' => get_permalink(),
               'title' => get_the_title(),
               'excerpt' => get_the_excerpt(),
-              'img' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
+              'img' => get_the_post_thumbnail_url(get_the_ID(), 'miwanews-hero'),
               'date' => get_the_date('H:i d/m/Y'),
             ];
           endwhile;

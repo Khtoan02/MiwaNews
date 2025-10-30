@@ -81,3 +81,7 @@ function miwanews_load_more_posts() {
 add_action('wp_footer', function(){
     echo '<script>window.miwanews_ajax_url = "' . admin_url('admin-ajax.php') . '";</script>';
 });
+
+add_action('after_setup_theme', function() {
+    add_image_size('miwanews-hero', 1140, 360, true); // 19:6, crop cứng
+});

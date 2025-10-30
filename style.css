@@ -49,7 +49,6 @@ Text Domain: miwanews
 .markdown-content pre {line-height:1.6!important;overflow:auto!important;}
 .markdown-content a {color:#2563eb!important;text-decoration:underline dotted 1.5px #60a5fa!important; transition: color 0.2s;}
 .markdown-content a:hover {color:#1d4ed8!important;text-decoration:underline solid 2px #1d4ed8!important;}
-.markdown-content p {margin-bottom:1.3em!important;margin-top:0!important;}
 
 figure, .wp-block-image, .entry-content figure, .markdown-content figure, .wp-caption { position:relative!important; }
 figure > figcaption,
@@ -133,8 +132,8 @@ figure > figcaption,
     margin: 0.8rem 0 0.6rem 0 !important;
   }
   .markdown-content img {
-    margin-top: 2.1rem !important;
-    margin-bottom: 1.1rem !important;
+    margin-top: 0.9rem !important;
+    margin-bottom: 0.9rem !important;
   }
   .markdown-content blockquote {
     padding: 0.7rem 1rem !important;
@@ -154,9 +153,6 @@ figure > figcaption,
     padding-left: 0.15em!important;
     text-indent: 0!important;
     word-break: break-word!important;
-  }
-  .markdown-content p {
-    margin-bottom: 0.9em !important;
   }
   p {
     font-size: 11px !important;
