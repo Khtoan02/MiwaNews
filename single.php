@@ -1,7 +1,7 @@
 <?php
 get_header();
 ?>
-<div class="container mx-auto max-w-[1200px] px-4">
+<div class="container w-full max-w-[1200px] mx-auto px-1 sm:px-4 ">
     <!-- Section 1: Nội dung bài viết -->
     <section class="mb-12">
         <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
@@ -22,16 +22,21 @@ get_header();
                         </div>
                     <?php endif; ?>
                     <?php if (has_post_thumbnail()) : ?>
-                        <figure class="mb-6 w-full flex flex-col items-center">
+                        <figure class="mb-6 w-full flex flex-col items-center relative">
                             <div class="rounded-2xl overflow-hidden w-full max-w-[1200px] mx-auto">
                                 <?php the_post_thumbnail('large', [
                                     'class' => 'w-full max-h-[520px] object-cover mx-auto rounded-2xl',
                                     'alt' => get_the_title()
-                                ]); ?>
+                                ]);
+                                ?>
+                                <?php $caption = get_post(get_post_thumbnail_id())->post_excerpt ?? ''; if (!empty($caption)) : ?>
+                                    <figcaption style="position:absolute;left:12px;bottom:12px;z-index:30;"
+                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs bg-black/75 text-white shadow-lg max-w-[95%] font-normal">
+                                        <svg height="15" width="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-1 text-blue-300"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
+                                        <?php echo esc_html($caption); ?>
+                                    </figcaption>
+                                <?php endif; ?>
                             </div>
-                            <?php $caption = get_post(get_post_thumbnail_id())->post_excerpt ?? ''; if (!empty($caption)) : ?>
-                                <figcaption class="text-xs italic text-gray-500 mt-1 text-center max-w-[1100px] mx-auto"><?php echo esc_html($caption); ?></figcaption>
-                            <?php endif; ?>
                         </figure>
                     <?php endif; ?>
                     <div class="markdown-content">

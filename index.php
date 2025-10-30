@@ -20,35 +20,48 @@ get_header();
               'permalink' => get_permalink(),
               'title' => get_the_title(),
               'excerpt' => get_the_excerpt(),
-              'img' => get_the_post_thumbnail_url(get_the_ID(), 'medium_large'),
-              'date' => get_the_date(),
+              'img' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
+              'date' => get_the_date('H:i d/m/Y'),
             ];
           endwhile;
           ?>
           <section class="mb-12">
             <h2 class="text-2xl font-bold mb-6"><?php echo esc_html($cat->name); ?></h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <!-- Bài 1: bài lớn (trái) -->
-              <div class="md:col-span-2 flex flex-col justify-between bg-white rounded-xl shadow-lg p-6 min-h-[320px] md:min-h-[350px]">
+              <!-- Bài 1: dạng hero overlay, ảnh nền full -->
+              <div class="relative md:col-span-2 rounded-xl shadow-lg overflow-hidden min-h-[320px] md:min-h-[350px] flex">
                 <?php if (!empty($posts_mag[0])) : $b1 = $posts_mag[0]; ?>
-                  <div>
-                    <div class="text-xs text-right text-gray-500 mb-2"><?php echo $b1['date']; ?></div>
-                    <h3 class="text-2xl font-bold mb-2"><?php echo $b1['title']; ?></h3>
-                    <div class="text-sm text-gray-700 mb-4"><?php echo $b1['excerpt']; ?></div>
-                  </div>
-                  <div class="flex justify-end">
-                    <a href="<?php echo $b1['permalink']; ?>" class="inline-block mt-auto px-5 py-2 bg-gray-200 hover:bg-gray-300 rounded-full text-base font-medium">Đọc ngay</a>
+                  <?php if (!empty($b1['img'])): ?>
+                    <img src="<?php echo $b1['img']; ?>" alt="<?php echo esc_attr($b1['title']); ?>" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/0 z-10"></div>
+                  <?php endif; ?>
+                  <!-- Ngày top-right -->
+                  <div class="absolute top-3 right-3 z-20"><span class="bg-black/70 text-white rounded-full px-3 py-1 text-xs"><?php echo $b1['date']; ?></span></div>
+                  <!-- Text/nút -->
+                  <div class="absolute bottom-0 left-0 right-0 z-20 p-5 md:p-8 flex flex-col gap-3">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-1 text-white leading-tight"> <?php echo $b1['title']; ?> </h3>
+                    <div class="text-base md:text-lg text-white/90 mb-3"><?php echo $b1['excerpt']; ?></div>
+                    <div class="flex justify-end">
+                      <a href="<?php echo $b1['permalink']; ?>" class="inline-block mt-auto px-6 py-2 bg-white/20 text-white font-medium rounded-full border border-white/40 hover:bg-white/40 transition">Đọc ngay</a>
+                    </div>
                   </div>
                 <?php endif; ?>
               </div>
               <div class="flex flex-col gap-4">
-                <!-- Bài 2 và Bài 3 (bên phải, dưới bài lớn) -->
+                <!-- Bài 2 và Bài 3 (hero card nhỏ overlay) -->
                 <?php for($i=1;$i<=2;$i++): if(!empty($posts_mag[$i])):$b=$posts_mag[$i];?>
-                <div class="bg-white rounded-xl shadow p-4 flex flex-col min-h-[110px]">
-                  <div class="text-xs text-right text-gray-500 mb-1"><?php echo $b['date']; ?></div>
-                  <h4 class="text-base font-semibold mb-1"><?php echo $b['title']; ?></h4>
-                  <div class="text-xs text-gray-600 mb-2 line-clamp-2"><?php echo $b['excerpt']; ?></div>
-                  <a href="<?php echo $b['permalink']; ?>" class="inline-block px-4 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300">Đọc ngay</a>
+                <div class="relative rounded-xl shadow overflow-hidden min-h-[140px] flex flex-col">
+                  <?php if (!empty($b['img'])): ?>
+                    <img src="<?php echo $b['img']; ?>" alt="<?php echo esc_attr($b['title']); ?>" class="absolute inset-0 w-full h-full object-cover z-0" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/0 z-10"></div>
+                  <?php endif; ?>
+                  <!-- Ngày top-right -->
+                  <div class="absolute top-2 right-2 z-20"><span class="bg-black/60 text-white rounded-full px-2 py-1 text-xs"><?php echo $b['date']; ?></span></div>
+                  <div class="absolute bottom-0 left-0 right-0 z-20 p-4 flex flex-col gap-1">
+                    <h4 class="text-lg font-semibold mb-0 text-white leading-tight line-clamp-2"><?php echo $b['title']; ?></h4>
+                    <div class="text-xs text-white/90 mb-2 line-clamp-2"><?php echo $b['excerpt']; ?></div>
+                    <a href="<?php echo $b['permalink']; ?>" class="inline-block px-4 py-1 text-sm bg-white/20 text-white rounded-full hover:bg-white/40 transition mt-auto">Đọc ngay</a>
+                  </div>
                 </div>
                 <?php endif; endfor; ?>
               </div>
@@ -56,11 +69,20 @@ get_header();
             <!-- Hàng dưới: 4 bài nhỏ ngang -->
             <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
               <?php for($i=3;$i<7;$i++): if(!empty($posts_mag[$i])):$b=$posts_mag[$i];?>
-              <div class="bg-white rounded-xl shadow p-4 flex flex-col min-h-[110px]">
-                <div class="text-xs text-right text-gray-500 mb-1"><?php echo $b['date']; ?></div>
-                <h4 class="text-base font-semibold mb-1"><?php echo $b['title']; ?></h4>
-                <div class="text-xs text-gray-600 mb-2 line-clamp-2"><?php echo $b['excerpt']; ?></div>
-                <a href="<?php echo $b['permalink']; ?>" class="inline-block px-4 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300">Đọc ngay</a>
+              <div class="rounded-xl shadow bg-white flex flex-col overflow-hidden">
+                <div class="relative">
+                  <?php if (!empty($b['img'])): ?>
+                    <a href="<?php echo $b['permalink']; ?>" class="block w-full h-36 md:h-40 overflow-hidden"><img src="<?php echo $b['img']; ?>" alt="<?php echo esc_attr($b['title']); ?>" class="w-full h-full object-cover" loading="lazy" style="border-top-left-radius:0.75rem;border-top-right-radius:0.75rem"></a>
+                  <?php endif; ?>
+                  <!-- Ngày ở trên ảnh góc phải -->
+                  <div class="absolute top-2 right-2 z-10"><span class="bg-black/60 text-white rounded-full px-2 py-1 text-xs"><?php echo $b['date']; ?></span></div>
+                  <!-- Nút Đọc ngay trên ảnh, dưới bên trái -->
+                  <a href="<?php echo $b['permalink']; ?>" class="absolute left-2 bottom-2 z-10 px-3 py-1 text-sm bg-black/60 text-white rounded-full hover:bg-black/80 transition">Đọc ngay</a>
+                </div>
+                <div class="flex flex-col flex-1 px-3 pb-3 pt-2">
+                  <h4 class="text-base font-semibold mb-1 leading-tight line-clamp-2"><?php echo $b['title']; ?></h4>
+                  <div class="text-xs text-gray-600 mb-1 line-clamp-2"><?php echo $b['excerpt']; ?></div>
+                </div>
               </div>
               <?php endif; endfor; ?>
             </div>

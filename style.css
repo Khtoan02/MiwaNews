@@ -51,11 +51,70 @@ Text Domain: miwanews
 .markdown-content a:hover {color:#1d4ed8!important;text-decoration:underline solid 2px #1d4ed8!important;}
 .markdown-content p {margin-bottom:1.3em!important;margin-top:0!important;}
 
+figure, .wp-block-image, .entry-content figure, .markdown-content figure, .wp-caption { position:relative!important; }
+figure > figcaption,
+.wp-block-image figcaption,
+.markdown-content figure > figcaption,
+.wp-caption .wp-caption-text,
+.wp-caption-text {
+  position: absolute !important;
+  left: 12px !important;
+  bottom: 12px !important;
+  z-index: 99 !important;
+  background: rgba(22, 28, 37, 0.84) !important;
+  color: #fff !important;
+  padding: 6px 14px !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  max-width: 95% !important;
+  box-shadow: 0 3px 14px 0 #0002 !important;
+  line-height: 1.35!important;
+}
+@media (max-width: 700px) {
+  figure > figcaption,
+  .wp-block-image figcaption,
+  .markdown-content figure > figcaption,
+  .wp-caption .wp-caption-text,
+  .wp-caption-text {
+    font-size: 10px !important;
+    padding: 5px 10px !important;
+    left:7px!important;
+    bottom:7px!important;
+  }
+}
+
 @media (max-width: 640px) {
+  .markdown-content, .markdown-content *, .markdown-content table, .markdown-content pre, .markdown-content code, .markdown-content blockquote, .markdown-content img, .markdown-content figure, .markdown-content th, .markdown-content td  {
+    max-width: 100vw !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  .markdown-content pre,
+  .markdown-content code {
+    white-space: pre-wrap !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+  .markdown-content table {
+    display: block !important;
+    overflow-x: auto !important;
+    min-width: 0 !important;
+  }
+  .markdown-content th, .markdown-content td {
+    white-space: pre-line !important;
+  }
+  .markdown-content img, .markdown-content figure {
+    height: auto !important;
+  }
   .markdown-content {
     font-size: 11px !important;
     line-height: 1.65 !important;
-    padding-top: 72px !important; /* để không bị header che */
     padding-left: 8px !important;
     padding-right: 8px !important;
   }
@@ -83,11 +142,24 @@ Text Domain: miwanews
     font-size: 0.98em !important;
   }
   .markdown-content ul, .markdown-content ol {
-    margin-left: 1.2rem !important;
+    padding-left: 1.2em !important;
+    margin-left: 0 !important;
     margin-right: 0 !important;
-    font-size: 1em !important;
+    list-style-position: outside !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+  .markdown-content li {
+    margin-bottom: 0.5rem !important;
+    padding-left: 0.15em!important;
+    text-indent: 0!important;
+    word-break: break-word!important;
   }
   .markdown-content p {
     margin-bottom: 0.9em !important;
+  }
+  p {
+    font-size: 11px !important;
+    line-height: 1.65 !important;
   }
 }
