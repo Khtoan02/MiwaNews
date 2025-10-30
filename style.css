@@ -1,0 +1,93 @@
+/*
+Theme Name: MiwaNews
+Theme URI: https://sachchocon.online/
+Author: Bạn
+Author URI: https://sachchocon.online/
+Description: Theme báo chí, tin tức, kiến thức, trình bày tối giản với header 52px, không có footer. Responsive cho desktop và mobile. Sử dụng TailwindCSS.
+Version: 1.0.0
+Tags: news, minimal, responsive, tailwindcss
+Text Domain: miwanews
+*/
+
+/* === Markdown Content Override for .markdown-content === */
+.markdown-content {
+  font-family: system-ui,ui-sans-serif,sans-serif;
+  color: #1a202c;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+.markdown-content h1 { font-size:2.25rem!important; font-weight:700!important; margin:2rem 0 1.5rem 0!important; line-height:1.1; }
+.markdown-content h2 { font-size:1.5rem!important; font-weight:700!important; border-left:4px solid #3b82f6!important; padding:0.5rem 0 0.5rem 1rem!important; background:#e0f2fe!important; border-radius:0.5rem!important; margin:2rem 0 1.1rem 0!important;}
+.markdown-content h3 { font-size:1.15rem!important;font-weight:600!important;padding:0.25rem 0 0.25rem 1rem!important;border-left:3px solid #93c5fd!important;margin:1rem 0 1rem 0!important;background:#eff6ff!important; border-radius:0.4rem!important;}
+.markdown-content ul, .markdown-content ol { margin:1.25rem 0 1.25rem 2.5rem!important; }
+.markdown-content ul {list-style: disc outside!important;}
+.markdown-content ol {list-style: decimal outside!important;}
+.markdown-content li {margin-bottom:0.5rem!important;}
+.markdown-content strong {font-weight:700!important;}
+.markdown-content blockquote {
+  border-left: 4px solid #2563eb!important;
+  background: #e0f2fe!important;
+  color: #0c2856!important;
+  font-style: italic;
+  font-weight: 500;
+  border-radius:0.5rem!important;
+  padding: 1rem 2rem!important;
+  margin: 2rem 0!important;
+}
+.markdown-content img {
+  max-width: 100%;
+  margin: 2rem auto!important;
+  border-radius: 1rem!important;
+  border: 1px solid #e5e7eb!important;
+  display: block!important;
+  box-shadow:0 6px 16px #0001!important;
+}
+.markdown-content table {border-collapse:collapse!important;width:100%!important;box-shadow:0 2px 8px #0001!important;margin:2rem 0!important;}
+.markdown-content th, .markdown-content td { border:1px solid #d1d5db!important;padding:0.5rem 1rem!important;}
+.markdown-content th {background:#f1f5f9!important;font-weight:600!important;}
+.markdown-content pre, .markdown-content code { background:#f3f4f6!important;color:#111827!important;border-radius:0.4rem!important;padding:0.25em 0.55em!important;font-size:1em!important;font-family:Menlo,Consolas,monospace!important;}
+.markdown-content pre {line-height:1.6!important;overflow:auto!important;}
+.markdown-content a {color:#2563eb!important;text-decoration:underline dotted 1.5px #60a5fa!important; transition: color 0.2s;}
+.markdown-content a:hover {color:#1d4ed8!important;text-decoration:underline solid 2px #1d4ed8!important;}
+.markdown-content p {margin-bottom:1.3em!important;margin-top:0!important;}
+
+@media (max-width: 640px) {
+  .markdown-content {
+    font-size: 11px !important;
+    line-height: 1.65 !important;
+    padding-top: 72px !important; /* để không bị header che */
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .markdown-content h1 {
+    font-size: 1.18rem !important;
+    margin: 1.4rem 0 1.1rem 0 !important;
+  }
+  .markdown-content h2 {
+    font-size: 1rem !important;
+    padding: 0.4rem 0 0.4rem 0.6rem !important;
+    margin: 1.3rem 0 0.9rem 0 !important;
+  }
+  .markdown-content h3 {
+    font-size: 0.95rem !important;
+    padding: 0.15rem 0 0.15rem 0.6rem !important;
+    margin: 0.8rem 0 0.6rem 0 !important;
+  }
+  .markdown-content img {
+    margin-top: 2.1rem !important;
+    margin-bottom: 1.1rem !important;
+  }
+  .markdown-content blockquote {
+    padding: 0.7rem 1rem !important;
+    margin: 1.2rem 0 !important;
+    font-size: 0.98em !important;
+  }
+  .markdown-content ul, .markdown-content ol {
+    margin-left: 1.2rem !important;
+    margin-right: 0 !important;
+    font-size: 1em !important;
+  }
+  .markdown-content p {
+    margin-bottom: 0.9em !important;
+  }
+}
