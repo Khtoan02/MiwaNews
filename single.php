@@ -1,54 +1,115 @@
 <?php
 get_header();
 ?>
-<div class="container w-full max-w-[1200px] mx-auto px-1 sm:px-4 ">
+<div class="container w-full mx-auto px-1 sm:px-4" style="max-width: 1200px">
     <!-- Section 1: Nội dung bài viết -->
-    <section class="mb-12">
-        <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-            <article class="bg-white rounded-xl px-2 sm:px-4 md:px-6 lg:px-8 py-4 md:py-10 mb-6 w-full max-w-[1200px] mx-auto relative">
-                <div class="flex flex-col items-center w-full">
-                    <div class="mb-3">
-                        <span class="px-4 py-1 text-sm rounded bg-yellow-50 text-gray-500 font-medium">Bài viết</span>
-                    </div>
-                    <h1 class="text-center text-3xl md:text-4xl font-bold mb-2 leading-tight text-gray-900">
-                        <?php the_title(); ?>
-                    </h1>
-                    <div class="text-xs text-center text-gray-500 mb-3">
-                        <?php echo get_the_date('l, d/m/Y H:i'); ?>
-                    </div>
+    <!-- Reading Progress Bar -->
+    <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-blue-600 z-[60] w-0 transition-all duration-300"></div>
+
+    <!-- Breadcrumbs -->
+    <div class="py-4 text-xs text-gray-500 font-medium whitespace-nowrap overflow-x-auto hide-scrollbar">
+        <a href="<?php echo home_url(); ?>" class="hover:text-blue-600">Trang chủ</a> 
+        <span class="mx-1">/</span>
+        <?php 
+        $cats = get_the_category();
+        if ($cats) {
+            echo '<a href="' . get_category_link($cats[0]->term_id) . '" class="hover:text-blue-600">' . $cats[0]->name . '</a>';
+            echo '<span class="mx-1">/</span>';
+        }
+        ?>
+        <span class="text-gray-800"><?php the_title(); ?></span>
+    </div>
+
+    <div class="relative">
+        
+        <!-- Main Content -->
+        <section class="w-full max-w-4xl mx-auto">
+            <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+                <article class="bg-white relative mb-12">
+                    
+                    <!-- Header Redesigned -->
+                    <header class="mb-8 md:mb-12 text-center md:text-left">
+                        <div class="mb-4 flex flex-wrap gap-2 justify-center md:justify-start">
+                             <?php
+                            $cats = get_the_category();
+                            if ($cats) : 
+                                foreach($cats as $cat): ?>
+                                <a href="<?php echo get_category_link($cat->term_id); ?>" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-800 hover:bg-blue-200 transition">
+                                    <?php echo $cat->name; ?>
+                                </a>
+                            <?php endforeach; endif; ?>
+                        </div>
+                        
+                        <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-gray-900 leading-tight tracking-tight">
+                            <?php the_title(); ?>
+                        </h1>
+                        
+                        <!-- Simple Meta -->
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-gray-500 py-4 border-b border-gray-100">
+                             <div class="flex items-center gap-1">
+                                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                                <span><?php echo get_the_date('d/m/Y'); ?></span>
+                            </div>
+                            <span class="hidden sm:inline text-gray-300">|</span>
+                            <div class="flex items-center gap-1">
+                                <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                                <span><?php echo number_format(get_post_views(get_the_ID())); ?> lượt xem</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Featured Image -->
+                    <?php if (has_post_thumbnail()) : ?>
+                        <figure class="mb-10 relative rounded-xl overflow-hidden">
+                            <?php the_post_thumbnail('full', [
+                                'class' => 'w-full h-auto object-cover shadow-sm',
+                                'alt' => get_the_title()
+                            ]);
+                            ?>
+                            <?php $caption = get_post(get_post_thumbnail_id())->post_excerpt ?? ''; if (!empty($caption)) : ?>
+                                <figcaption class="mt-2 text-center text-xs text-gray-500 italic">
+                                    <?php echo esc_html($caption); ?>
+                                </figcaption>
+                            <?php endif; ?>
+                        </figure>
+                    <?php endif; ?>
+
+                    <!-- Excerpt / Intro -->
                     <?php if (has_excerpt() && get_the_excerpt()) : ?>
-                        <div class="font-medium text-gray-700 text-center max-w-2xl mb-6">
+                        <div class="text-lg md:text-xl font-medium text-gray-600 leading-relaxed mb-8">
                             <?php the_excerpt(); ?>
                         </div>
                     <?php endif; ?>
-                    <?php if (has_post_thumbnail()) : ?>
-                        <figure class="mb-6 w-full flex flex-col items-center relative">
-                            <div class="rounded-2xl overflow-hidden w-full max-w-[1200px] mx-auto">
-                                <?php the_post_thumbnail('large', [
-                                    'class' => 'w-full max-h-[520px] object-cover mx-auto rounded-2xl',
-                                    'alt' => get_the_title()
-                                ]);
-                                ?>
-                                <?php $caption = get_post(get_post_thumbnail_id())->post_excerpt ?? ''; if (!empty($caption)) : ?>
-                                    <figcaption style="position:absolute;left:12px;bottom:12px;z-index:30;"
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs bg-black/75 text-white shadow-lg max-w-[95%] font-normal">
-                                        <svg height="15" width="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-1 text-blue-300"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
-                                        <?php echo esc_html($caption); ?>
-                                    </figcaption>
-                                <?php endif; ?>
-                            </div>
-                        </figure>
-                    <?php endif; ?>
-                    <div class="markdown-content">
+
+                    <!-- Main Article Content -->
+                    <div class="markdown-content text-base md:text-lg leading-7 md:leading-8 text-gray-800" id="post-content">
                         <?php the_content(); ?>
                     </div>
-                </div>
-            </article>
-        <?php endwhile; endif; ?>
-        <div class="flex justify-between mt-8 max-w-[1200px] mx-auto">
-            <div><?php previous_post_link('%link', '← Bài trước'); ?></div>
-            <div><?php next_post_link('%link', 'Bài sau →'); ?></div>
+                    
+                    <!-- Tags Section -->
+                    <?php 
+                    $tags = get_the_tags();
+                    if ($tags) : ?>
+                    <div class="mt-8 pt-6 border-t border-gray-100">
+                        <div class="flex flex-wrap gap-2">
+                            <?php foreach($tags as $tag) : ?>
+                                <a href="<?php echo get_tag_link($tag->term_id); ?>" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 text-sm rounded transition">
+                                    #<?php echo $tag->name; ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
+                </article>
+            <?php endwhile; endif; ?>
+        </section>
+    </div>
+        <div class="flex justify-between items-center mt-8 mb-12 max-w-4xl mx-auto text-sm font-medium">
+            <div class="text-left w-1/2 pr-4"><?php previous_post_link('%link', '← %title'); ?></div>
+            <div class="text-right w-1/2 pl-4"><?php next_post_link('%link', '%title →'); ?></div>
         </div>
+
         <!-- Đã tắt phần bình luận, xoá comments_template -->
     </section>
 
@@ -88,63 +149,8 @@ get_header();
         <?php endif; ?>
     </section>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const wrapper = document.getElementById('latest-posts');
-  const listing = document.getElementById('latest-listing');
-  let isLoading = false;
-  let paged = 1;
-  let ended = false;
-  const sentinel = document.createElement('div');
-  sentinel.id = 'load-more-sentinel';
-  wrapper.appendChild(sentinel);
-  function loadMore() {
-    if (isLoading || ended) return;
-    isLoading = true;
-    paged++;
-    sentinel.textContent = 'Đang tải...';
-    fetch(window.miwanews_ajax_url, {
-      method: 'POST',
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `action=miwanews_load_more_posts&paged=${paged}`
-    })
-    .then(res=>res.json())
-    .then(data=>{
-      if (!data.success || !data.data.html.trim()) {
-        sentinel.textContent = 'Không còn bài viết nào.';
-        ended = true;
-      } else {
-        listing.insertAdjacentHTML('beforeend', data.data.html);
-        sentinel.textContent = '';
-      }
-      isLoading = false;
-    })
-    .catch(() => {
-      sentinel.textContent = 'Tải lỗi. Thử lại.';
-      isLoading = false;
-    });
-  }
-  var btn = document.getElementById('load-more-posts');
-  if(btn) btn.remove();
-  if('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          loadMore();
-        }
-      });
-    }, { rootMargin: '100px' });
-    io.observe(sentinel);
-  } else {
-    window.addEventListener('scroll', function() {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-        loadMore();
-      }
-    });
-  }
-});
-</script>
+
 <?php
 // Không có footer.php, chỉ cần wp_footer
-wp_footer();
+get_footer();
 ?>
