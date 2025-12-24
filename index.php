@@ -35,17 +35,18 @@ get_header();
                     $img_src = !empty($b1['img']) ? $b1['img'] : "data:image/svg+xml,%3Csvg width='800' height='450' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0' stop-color='%23f3f4f6'/%3E%3Cstop offset='0.5' stop-color='%23e5e7eb'/%3E%3Cstop offset='1' stop-color='%23f3f4f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1.5s' repeatCount='indefinite'/%3E%3C/rect%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%239ca3af'%3E%C4%90ang%20t%E1%BA%A3i%20%E1%BA%A3nh...%3C/text%3E%3C/svg%3E";
                   ?>
                   <img src="<?php echo $img_src; ?>" alt="<?php echo esc_attr($b1['title']); ?>" class="absolute inset-0 w-full h-full object-cover z-0 <?php echo empty($b1['img']) ? 'image-placeholder-active' : ''; ?>" loading="lazy">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/0 z-10"></div>
+                  <a href="<?php echo $b1['permalink']; ?>" class="stretched-link z-10"><span class="sr-only"><?php echo $b1['title']; ?></span></a>
+                  <div class="absolute top-3 right-3 z-20"><span class="bg-black/70 text-white rounded-full px-3 py-1 text-xs backdrop-blur-sm"><?php echo $b1['date']; ?></span></div>
+                  <!-- Darker gradient for better text readability -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10 pointer-events-none"></div>
                   
-                  <div class="absolute top-3 right-3 z-20"><span class="bg-black/70 text-white rounded-full px-3 py-1 text-xs"><?php echo $b1['date']; ?></span></div>
-                  <div class="absolute bottom-0 left-0 right-0 z-20 p-5 md:p-8 flex flex-col gap-3">
-                    <h3 class="text-2xl md:text-3xl font-bold mb-1 text-white leading-tight z-over-link">
-                        <!-- Use Stretched Link Here -->
-                       <a href="<?php echo $b1['permalink']; ?>" class="stretched-link text-white hover:text-blue-200"><?php echo $b1['title']; ?></a>
+                  <div class="absolute bottom-0 left-0 right-0 z-20 p-5 md:p-6 flex flex-col gap-2 pointer-events-none">
+                    <h3 class="text-xl md:text-2xl font-bold text-white leading-snug line-clamp-2 drop-shadow-sm">
+                       <?php echo $b1['title']; ?>
                     </h3>
-                    <div class="text-base md:text-lg text-white/90 mb-3 z-over-link"><?php echo $b1['excerpt']; ?></div>
-                    <div class="flex justify-end z-over-link">
-                      <span class="inline-block mt-auto px-6 py-2 bg-white/20 text-white font-medium rounded-full border border-white/40 hover:bg-white/40 transition">Đọc ngay</span>
+                    <div class="text-sm text-gray-200 mb-2 line-clamp-2 leading-relaxed drop-shadow-sm"><?php echo $b1['excerpt']; ?></div>
+                    <div class="flex justify-start">
+                      <span class="inline-block px-4 py-1.5 bg-white/20 text-white text-xs font-semibold rounded-full border border-white/30 hover:bg-white/30 transition backdrop-blur-md">Đọc ngay</span>
                     </div>
                   </div>
                 <?php endif; ?>

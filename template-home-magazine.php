@@ -115,25 +115,27 @@ if (!empty($showcase_slugs)) {
         <div class="grid gap-6 lg:grid-cols-3">
           <?php $main = $hero_posts[0]; ?>
           <article class="relative overflow-hidden rounded-3xl bg-gray-900 text-white lg:col-span-2 relative-card group">
+            <a href="<?php echo esc_url($main['link']); ?>" class="stretched-link z-10"><span class="sr-only"><?php echo esc_html($main['title']); ?></span></a>
             <?php if (!empty($main['thumb'])) : ?>
-              <img src="<?php echo esc_url($main['thumb']); ?>" alt="<?php echo esc_attr($main['title']); ?>" class="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-90" loading="lazy">
-              <span class="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/20 to-transparent"></span>
+              <img src="<?php echo esc_url($main['thumb']); ?>" alt="<?php echo esc_attr($main['title']); ?>" class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105 group-hover:opacity-100" loading="lazy">
+              <!-- Darker gradient for better text readability -->
+              <span class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none"></span>
             <?php endif; ?>
-            <div class="relative z-10 flex h-full flex-col justify-end space-y-4 p-8">
-              <div class="flex gap-3 text-xs uppercase tracking-widest text-white/80 z-over-link">
+            <div class="relative z-20 flex h-full flex-col justify-end space-y-3 p-6 md:p-8 pointer-events-none">
+              <div class="flex gap-3 text-xs uppercase tracking-widest text-white/80 pointer-events-auto">
                 <?php foreach ($main['categories'] as $cat_item) : ?>
-                  <a href="<?php echo esc_url(get_category_link($cat_item->term_id)); ?>" class="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10 z-over-link relative">
+                  <a href="<?php echo esc_url(get_category_link($cat_item->term_id)); ?>" class="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10 relative z-30 backdrop-blur-sm">
                     <?php echo esc_html($cat_item->name); ?>
                   </a>
                 <?php endforeach; ?>
               </div>
-              <h3 class="text-3xl font-bold leading-tight">
-                <a href="<?php echo esc_url($main['link']); ?>" class="hover:text-blue-200 stretched-link"><?php echo esc_html($main['title']); ?></a>
+              <h3 class="text-2xl md:text-3xl font-bold leading-tight drop-shadow-sm">
+                <span class="hover:text-blue-200 transition text-white"><?php echo esc_html($main['title']); ?></span>
               </h3>
-              <p class="line-clamp-3 text-base text-white/90"><?php echo esc_html($main['excerpt']); ?></p>
-              <div class="flex items-center justify-between text-sm text-white/80 z-over-link">
+              <p class="line-clamp-2 text-sm md:text-base text-gray-200 leading-relaxed drop-shadow-sm"><?php echo esc_html($main['excerpt']); ?></p>
+              <div class="flex items-center justify-between text-xs md:text-sm text-white/80 pt-2">
                 <span><?php echo esc_html($main['author']); ?> • <?php echo esc_html($main['time']); ?> • <?php echo esc_html($main['date']); ?></span>
-                <span class="rounded-full bg-white/20 px-4 py-2 font-semibold hover:bg-white/40 z-over-link relative pointer-events-none">Đọc ngay</span>
+                <span class="rounded-full bg-white/20 px-4 py-2 font-semibold hover:bg-white/40 text-xs backdrop-blur-md border border-white/20">Đọc ngay</span>
               </div>
             </div>
           </article>
