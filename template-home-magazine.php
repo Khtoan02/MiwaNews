@@ -282,42 +282,51 @@ if (!empty($showcase_slugs)) {
       <?php endif; ?>
     </section>
 
-    <!-- Newsletter CTA -->
-    <section class="rounded-3xl bg-white p-10 shadow-lg">
-      <div class="grid gap-8 md:grid-cols-2">
+<!-- Latest Posts (Infinite Scroll) -->
+    <section id="latest-posts" class="space-y-8 min-h-screen">
+      <div class="flex items-center justify-between">
         <div>
-          <p class="text-xs uppercase text-gray-400" style="letter-spacing: 0.3em;">newsletter</p>
-          <h2 class="mt-2 text-3xl font-bold text-gray-900">Nhận tin nóng mỗi sáng</h2>
-          <p class="mt-3 text-gray-600">Hệ thống sẽ gửi bản tin chọn lọc gồm tin tiêu điểm, phân tích chuyên sâu và các bài viết chưa kịp đọc.</p>
-          <ul class="mt-4 space-y-2 text-sm text-gray-500">
-            <li><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Không spam, hủy đăng ký bất cứ lúc nào.</li>
-            <li><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Tự động phân loại theo sở thích của bạn.</li>
-            <li><i class="fa-solid fa-check text-emerald-500 mr-2"></i>Độc quyền cho độc giả đăng ký.</li>
-          </ul>
-        </div>
-        <div class="rounded-2xl border border-gray-100 bg-gray-50 p-6">
-          <form class="space-y-4" action="#" method="post">
-            <div>
-              <label for="miwanews-newsletter-name" class="text-sm font-semibold text-gray-700">Họ tên</label>
-              <input type="text" id="miwanews-newsletter-name" name="miwanews_newsletter_name" class="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:border-gray-900 focus:outline-none" placeholder="Nguyễn Văn A">
-            </div>
-            <div>
-              <label for="miwanews-newsletter-email" class="text-sm font-semibold text-gray-700">Email</label>
-              <input type="email" id="miwanews-newsletter-email" name="miwanews_newsletter_email" class="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:border-gray-900 focus:outline-none" placeholder="ban@email.com">
-            </div>
-            <div>
-              <label for="miwanews-newsletter-topics" class="text-sm font-semibold text-gray-700">Chủ đề quan tâm</label>
-              <select id="miwanews-newsletter-topics" name="miwanews_newsletter_topics[]" multiple class="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 focus:border-gray-900 focus:outline-none">
-                <?php foreach (get_categories(['hide_empty' => true]) as $topic_cat) : ?>
-                  <option value="<?php echo esc_attr($topic_cat->slug); ?>"><?php echo esc_html($topic_cat->name); ?></option>
-                <?php endforeach; ?>
-              </select>
-              <p class="mt-1 text-xs text-gray-400">Giữ Ctrl/Command để chọn nhiều mục.</p>
-            </div>
-            <button type="submit" class="w-full rounded-2xl bg-gray-900 py-3 text-center text-white font-semibold hover:bg-gray-700">Đăng ký ngay</button>
-          </form>
+          <p class="text-xs uppercase text-gray-400" style="letter-spacing: 0.3em;">newest updates</p>
+          <h2 class="text-2xl font-bold text-gray-800">Bài viết mới nhất</h2>
         </div>
       </div>
+
+      <div id="latest-listing">
+        <?php
+        $latest_args = [
+            'posts_per_page'      => 10,
+            'ignore_sticky_posts' => true,
+            'status'              => 'publish',
+            'paged'               => 1,
+        ];
+        $latest_query = new WP_Query($latest_args);
+        if ($latest_query->have_posts()) :
+            while ($latest_query->have_posts()) : $latest_query->the_post(); ?>
+                <article class="mb-8 pb-8 border-b border-gray-200 flex flex-col sm:flex-row gap-4 relative-card group">
+                    <!-- Thumbnail -->
+                    <div class="block w-full sm:w-48 flex-shrink-0">
+                      <?php if (has_post_thumbnail()) : ?>
+                        <?php the_post_thumbnail('medium_large', ['class' => 'w-full h-32 sm:h-32 object-cover rounded']); ?>
+                      <?php else : ?>
+                        <img src="data:image/svg+xml,%3Csvg width='800' height='450' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0' stop-color='%23f3f4f6'/%3E%3Cstop offset='0.5' stop-color='%23e5e7eb'/%3E%3Cstop offset='1' stop-color='%23f3f4f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1.5s' repeatCount='indefinite'/%3E%3C/rect%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%239ca3af'%3E%C4%90ang%20t%E1%BA%A3i%20%E1%BA%A3nh...%3C/text%3E%3C/svg%3E" alt="" class="w-full h-32 sm:h-32 object-cover rounded image-placeholder-active">
+                      <?php endif; ?>
+                    </div>
+                  <div class="flex-1">
+                    <h3 class="text-lg font-semibold mb-2">
+                        <a href="<?php the_permalink(); ?>" class="hover:text-blue-600 stretched-link"><?php the_title(); ?></a>
+                    </h3>
+                    <div class="text-sm text-gray-500 mb-2"><?php echo get_the_date(); ?></div>
+                    <div class="line-clamp-3 text-gray-700 text-sm mb-2"><?php the_excerpt(); ?></div>
+                    <span class="text-blue-600 hover:underline font-medium">Đọc tiếp &rarr;</span>
+                  </div>
+                </article>
+            <?php endwhile;
+            wp_reset_postdata();
+        else: ?>
+            <p class="text-gray-500">Chưa có bài viết mới nào.</p>
+        <?php endif; ?>
+      </div>
+      <!-- Sentinel/Loader element will be injected by JS here -->
     </section>
   </div>
 </main>
