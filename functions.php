@@ -227,3 +227,116 @@ add_action('wp_head', function() {
         set_post_views(get_the_ID());
     }
 });
+
+/*
+ * Custom XML Sitemap for SEO (Sitemap Index & Sub-sitemaps)
+ */
+function miwanews_register_sitemap_query_var($vars) {
+    $vars[] = 'miwanews_sitemap';
+    return $vars;
+}
+add_filter('query_vars', 'miwanews_register_sitemap_query_var');
+
+function miwanews_add_sitemap_rewrite_rule() {
+    add_rewrite_rule('^sitemap\.xml$', 'index.php?miwanews_sitemap=index', 'top');
+    add_rewrite_rule('^sitemap-([a-z-]+)\.xml$', 'index.php?miwanews_sitemap=$matches[1]', 'top');
+}
+add_action('init', 'miwanews_add_sitemap_rewrite_rule');
+
+function miwanews_render_sitemap() {
+    $type = get_query_var('miwanews_sitemap');
+    if (!$type) return;
+
+    header('Content-Type: application/xml; charset=utf-8');
+    echo '<?xml version="1.0" encoding="UTF-8"?>';
+
+    if ($type === 'index' || $type === '1') {
+        // --- SITEMAP INDEX ---
+        echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        
+        $sitemaps = ['posts', 'pages', 'categories'];
+        if (class_exists('WooCommerce')) {
+            $sitemaps[] = 'products';
+        }
+
+        foreach ($sitemaps as $slug) {
+            echo '<sitemap>';
+            echo '<loc>' . home_url('/sitemap-' . $slug . '.xml') . '</loc>';
+            echo '<lastmod>' . date('c') . '</lastmod>'; 
+            echo '</sitemap>';
+        }
+        
+        echo '</sitemapindex>';
+    } else {
+        // --- SUB SITEMAPS ---
+        echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        
+        if ($type === 'posts') {
+             $posts = get_posts(['numberposts' => -1, 'post_type' => 'post', 'orderby' => 'modified', 'post_status' => 'publish']);
+             foreach ($posts as $post) {
+                setup_postdata($post);
+                echo '<url>';
+                echo '<loc>' . get_permalink($post) . '</loc>';
+                echo '<lastmod>' . get_the_modified_date('c', $post) . '</lastmod>';
+                echo '<changefreq>weekly</changefreq>';
+                echo '<priority>0.8</priority>';
+                echo '</url>';
+             }
+             wp_reset_postdata();
+             
+        } elseif ($type === 'pages') {
+             // Homepage manual add
+             echo '<url><loc>' . home_url('/') . '</loc><lastmod>' . date('c') . '</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>';
+             
+             $posts = get_posts(['numberposts' => -1, 'post_type' => 'page', 'orderby' => 'modified', 'post_status' => 'publish']);
+             foreach ($posts as $post) {
+                setup_postdata($post);
+                echo '<url>';
+                echo '<loc>' . get_permalink($post) . '</loc>';
+                echo '<lastmod>' . get_the_modified_date('c', $post) . '</lastmod>';
+                echo '<changefreq>monthly</changefreq>';
+                echo '<priority>0.6</priority>';
+                echo '</url>';
+             }
+             wp_reset_postdata();
+             
+        } elseif ($type === 'categories') {
+             $terms = get_terms(['taxonomy' => 'category', 'hide_empty' => true]);
+             foreach ($terms as $term) {
+                 echo '<url>';
+                 echo '<loc>' . get_category_link($term) . '</loc>';
+                 echo '<changefreq>weekly</changefreq>';
+                 echo '<priority>0.5</priority>';
+                 echo '</url>';
+             }
+             
+        } elseif ($type === 'products' && class_exists('WooCommerce')) {
+             $posts = get_posts(['numberposts' => -1, 'post_type' => 'product', 'orderby' => 'modified', 'post_status' => 'publish']);
+             foreach ($posts as $post) {
+                setup_postdata($post);
+                echo '<url>';
+                echo '<loc>' . get_permalink($post) . '</loc>';
+                echo '<lastmod>' . get_the_modified_date('c', $post) . '</lastmod>';
+                echo '<changefreq>weekly</changefreq>';
+                echo '<priority>0.8</priority>';
+                echo '</url>';
+             }
+             wp_reset_postdata();
+        }
+
+        echo '</urlset>';
+    }
+    
+    exit;
+}
+add_action('template_redirect', 'miwanews_render_sitemap');
+
+// Auto-flush rules once (version 2)
+add_action('init', function() {
+    if (!get_option('miwanews_sitemap_v2_flushed')) {
+        miwanews_add_sitemap_rewrite_rule();
+        flush_rewrite_rules();
+        update_option('miwanews_sitemap_v2_flushed', 1);
+    }
+});
+
