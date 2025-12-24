@@ -157,17 +157,22 @@ function miwanews_load_more_posts() {
     ob_start();
     if ($query->have_posts()) :
         while ($query->have_posts()) : $query->the_post(); ?>
-            <article class="mb-8 pb-8 border-b border-gray-200 flex flex-col sm:flex-row gap-4">
-              <?php if (has_post_thumbnail()) : ?>
-                <a href="<?php the_permalink(); ?>" class="block w-full sm:w-48 flex-shrink-0">
-                  <?php the_post_thumbnail('medium_large', ['class' => 'w-full h-32 sm:h-32 object-cover rounded']); ?>
-                </a>
-              <?php endif; ?>
+            <article class="mb-8 pb-8 border-b border-gray-200 flex flex-col sm:flex-row gap-4 relative-card group">
+                <!-- Thumbnail -->
+                <div class="block w-full sm:w-48 flex-shrink-0">
+                  <?php if (has_post_thumbnail()) : ?>
+                    <?php the_post_thumbnail('medium_large', ['class' => 'w-full h-32 sm:h-32 object-cover rounded']); ?>
+                  <?php else : ?>
+                    <img src="data:image/svg+xml,%3Csvg width='800' height='450' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0' stop-color='%23f3f4f6'/%3E%3Cstop offset='0.5' stop-color='%23e5e7eb'/%3E%3Cstop offset='1' stop-color='%23f3f4f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1.5s' repeatCount='indefinite'/%3E%3C/rect%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%239ca3af'%3E%C4%90ang%20t%E1%BA%A3i%20%E1%BA%A3nh...%3C/text%3E%3C/svg%3E" alt="" class="w-full h-32 sm:h-32 object-cover rounded image-placeholder-active">
+                  <?php endif; ?>
+                </div>
               <div class="flex-1">
-                <h3 class="text-lg font-semibold mb-2"><a href="<?php the_permalink(); ?>" class="hover:text-blue-600"><?php the_title(); ?></a></h3>
+                <h3 class="text-lg font-semibold mb-2">
+                    <a href="<?php the_permalink(); ?>" class="hover:text-blue-600 stretched-link"><?php the_title(); ?></a>
+                </h3>
                 <div class="text-sm text-gray-500 mb-2"><?php echo get_the_date(); ?></div>
                 <div class="line-clamp-3 text-gray-700 text-sm mb-2"><?php the_excerpt(); ?></div>
-                <a href="<?php the_permalink(); ?>" class="text-blue-600 hover:underline font-medium">Đọc tiếp &rarr;</a>
+                <span class="text-blue-600 hover:underline font-medium">Đọc tiếp &rarr;</span>
               </div>
             </article>
         <?php endwhile;

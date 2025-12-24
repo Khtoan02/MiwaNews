@@ -110,45 +110,46 @@ if (!empty($showcase_slugs)) {
         <?php endif; ?>
       </div>
 
+      <!-- HERO LEFT: Main Post -->
       <?php if (!empty($hero_posts)) : ?>
         <div class="grid gap-6 lg:grid-cols-3">
           <?php $main = $hero_posts[0]; ?>
-          <article class="relative overflow-hidden rounded-3xl bg-gray-900 text-white lg:col-span-2">
+          <article class="relative overflow-hidden rounded-3xl bg-gray-900 text-white lg:col-span-2 relative-card group">
             <?php if (!empty($main['thumb'])) : ?>
-              <img src="<?php echo esc_url($main['thumb']); ?>" alt="<?php echo esc_attr($main['title']); ?>" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+              <img src="<?php echo esc_url($main['thumb']); ?>" alt="<?php echo esc_attr($main['title']); ?>" class="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-90" loading="lazy">
               <span class="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/20 to-transparent"></span>
             <?php endif; ?>
             <div class="relative z-10 flex h-full flex-col justify-end space-y-4 p-8">
-              <div class="flex gap-3 text-xs uppercase tracking-widest text-white/80">
+              <div class="flex gap-3 text-xs uppercase tracking-widest text-white/80 z-over-link">
                 <?php foreach ($main['categories'] as $cat_item) : ?>
-                  <a href="<?php echo esc_url(get_category_link($cat_item->term_id)); ?>" class="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10">
+                  <a href="<?php echo esc_url(get_category_link($cat_item->term_id)); ?>" class="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10 z-over-link relative">
                     <?php echo esc_html($cat_item->name); ?>
                   </a>
                 <?php endforeach; ?>
               </div>
               <h3 class="text-3xl font-bold leading-tight">
-                <a href="<?php echo esc_url($main['link']); ?>" class="hover:text-blue-200"><?php echo esc_html($main['title']); ?></a>
+                <a href="<?php echo esc_url($main['link']); ?>" class="hover:text-blue-200 stretched-link"><?php echo esc_html($main['title']); ?></a>
               </h3>
               <p class="line-clamp-3 text-base text-white/90"><?php echo esc_html($main['excerpt']); ?></p>
-              <div class="flex items-center justify-between text-sm text-white/80">
+              <div class="flex items-center justify-between text-sm text-white/80 z-over-link">
                 <span><?php echo esc_html($main['author']); ?> • <?php echo esc_html($main['time']); ?> • <?php echo esc_html($main['date']); ?></span>
-                <a href="<?php echo esc_url($main['link']); ?>" class="rounded-full bg-white/20 px-4 py-2 font-semibold hover:bg-white/40">Đọc ngay</a>
+                <span class="rounded-full bg-white/20 px-4 py-2 font-semibold hover:bg-white/40 z-over-link relative pointer-events-none">Đọc ngay</span>
               </div>
             </div>
           </article>
 
           <div class="grid gap-4">
             <?php foreach (array_slice($hero_posts, 1, 3) as $item) : ?>
-              <article class="flex gap-4 rounded-2xl bg-white p-4 shadow-sm">
+              <article class="flex gap-4 rounded-2xl bg-white p-4 shadow-sm relative-card group transition hover:shadow-lg">
                 <?php if (!empty($item['thumb'])) : ?>
-                  <a href="<?php echo esc_url($item['link']); ?>" class="relative block h-24 w-32 flex-shrink-0 overflow-hidden rounded-xl">
-                    <img src="<?php echo esc_url($item['thumb']); ?>" alt="<?php echo esc_attr($item['title']); ?>" class="h-full w-full object-cover" loading="lazy">
-                  </a>
+                  <div class="relative block h-24 w-32 flex-shrink-0 overflow-hidden rounded-xl">
+                    <img src="<?php echo esc_url($item['thumb']); ?>" alt="<?php echo esc_attr($item['title']); ?>" class="h-full w-full object-cover transition duration-500 group-hover:scale-110" loading="lazy">
+                  </div>
                 <?php endif; ?>
                 <div class="flex flex-1 flex-col">
                   <div class="uppercase text-gray-400" style="font-size: 11px; letter-spacing: 0.2em;"><?php echo esc_html($item['date']); ?></div>
                   <h4 class="mt-1 line-clamp-2 text-base font-semibold text-gray-900">
-                    <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-blue-600"><?php echo esc_html($item['title']); ?></a>
+                    <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-blue-600 stretched-link"><?php echo esc_html($item['title']); ?></a>
                   </h4>
                   <p class="mt-1 line-clamp-2 text-sm text-gray-500"><?php echo esc_html($item['excerpt']); ?></p>
                 </div>
@@ -179,15 +180,15 @@ if (!empty($showcase_slugs)) {
       </div>
       <?php if (!empty($trending_posts)) : ?>
         <div class="relative">
-          <div class="flex gap-4 overflow-x-auto scroll-smooth pb-4" data-trending-carousel>
+          <div class="flex gap-4 overflow-x-auto scroll-smooth pb-4 no-scrollbar" data-trending-carousel>
             <?php foreach ($trending_posts as $item) : ?>
-              <article class="w-72 flex-shrink-0 rounded-2xl bg-white p-4 shadow hover:-translate-y-1 hover:shadow-lg transition">
+              <article class="w-72 flex-shrink-0 rounded-2xl bg-white p-4 shadow hover:-translate-y-1 hover:shadow-lg transition relative-card group">
                 <div class="flex items-center gap-2 text-xs text-amber-600">
                   <i class="fa-solid fa-fire"></i>
                   <span><?php echo esc_html($item['date']); ?></span>
                 </div>
                 <h3 class="mt-2 line-clamp-2 text-lg font-semibold text-gray-900">
-                  <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-blue-600"><?php echo esc_html($item['title']); ?></a>
+                  <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-blue-600 stretched-link"><?php echo esc_html($item['title']); ?></a>
                 </h3>
                 <p class="mt-2 line-clamp-3 text-sm text-gray-500"><?php echo esc_html($item['excerpt']); ?></p>
                 <div class="mt-4 flex items-center justify-between text-xs text-gray-400">
@@ -212,10 +213,10 @@ if (!empty($showcase_slugs)) {
         </div>
         <div class="mt-8 grid gap-6 md:grid-cols-3">
           <?php foreach ($spotlight_posts as $item) : ?>
-            <article class="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+            <article class="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur relative-card group hover:bg-white/10 transition">
               <div class="uppercase text-white/60" style="font-size: 11px; letter-spacing: 0.25em;">Sticky</div>
               <h3 class="text-xl font-semibold leading-tight">
-                <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-amber-300"><?php echo esc_html($item['title']); ?></a>
+                <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-amber-300 stretched-link"><?php echo esc_html($item['title']); ?></a>
               </h3>
               <p class="line-clamp-3 text-sm text-white/80"><?php echo esc_html($item['excerpt']); ?></p>
               <div class="text-xs text-white/60"><?php echo esc_html($item['author']); ?> • <?php echo esc_html($item['date']); ?></div>
@@ -252,16 +253,16 @@ if (!empty($showcase_slugs)) {
               <div class="mt-4 space-y-4">
                 <?php if (!empty($cat_posts)) : ?>
                   <?php foreach ($cat_posts as $item) : ?>
-                    <article class="flex gap-3 border-b border-gray-100 pb-3 last:border-0">
+                    <article class="flex gap-3 border-b border-gray-100 pb-3 last:border-0 relative-card group">
                       <?php if (!empty($item['thumb'])) : ?>
-                        <a href="<?php echo esc_url($item['link']); ?>" class="block h-16 w-24 flex-shrink-0 overflow-hidden rounded-xl">
-                          <img src="<?php echo esc_url($item['thumb']); ?>" alt="<?php echo esc_attr($item['title']); ?>" class="h-full w-full object-cover" loading="lazy">
-                        </a>
+                        <div class="block h-16 w-24 flex-shrink-0 overflow-hidden rounded-xl">
+                          <img src="<?php echo esc_url($item['thumb']); ?>" alt="<?php echo esc_attr($item['title']); ?>" class="h-full w-full object-cover transition duration-500 group-hover:scale-110" loading="lazy">
+                        </div>
                       <?php endif; ?>
                       <div class="flex-1">
                         <div class="uppercase text-gray-400" style="font-size: 11px; letter-spacing: 0.2em;"><?php echo esc_html($item['date']); ?></div>
                         <h4 class="line-clamp-2 text-base font-semibold text-gray-900">
-                          <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-blue-600"><?php echo esc_html($item['title']); ?></a>
+                          <a href="<?php echo esc_url($item['link']); ?>" class="hover:text-blue-600 stretched-link"><?php echo esc_html($item['title']); ?></a>
                         </h4>
                         <p class="line-clamp-2 text-sm text-gray-500"><?php echo esc_html($item['excerpt']); ?></p>
                       </div>

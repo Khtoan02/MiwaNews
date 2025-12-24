@@ -1,3 +1,16 @@
+/*
+Theme Name: MiwaNews
+Theme URI: miwakovn.com
+Author: Khanh Toan
+Author URI: miwakovn.com
+Description: A premium, meticulously designed magazine theme focusing on typography and reading experience.
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: miwanews
+Tags: blog, magazine, news, editorial, clean, responsive
+*/
+
 /* === Meticulous Editorial Design System (Refined) === */
 
 :root {
@@ -273,6 +286,31 @@
 }
 
 .markdown-content td {
-  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--color-border);
 }
+
+/* === Helper: Stretched Link (Clickable Card) === */
+.relative-card {
+  position: relative !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.relative-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+}
+.stretched-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  content: "";
+  cursor: pointer;
+}
+/* Raise specific elements (like separate category tags) above the stretched link */
+.z-over-link {
+  position: relative;
+  z-index: 20;
+}
+

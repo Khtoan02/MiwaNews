@@ -150,36 +150,73 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // --- Image Error Handling & Placeholder (Global) ---
     const images = document.querySelectorAll('img');
-    // Placeholder: A clean SVG Data URI (Light Gray background with text)
-    const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='450' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EMiwaNews%3C/text%3E%3C/svg%3E";
+    
+    // Placeholder: Animated Skeleton Shimmer (SVG) with Text
+    // Hiệu ứng "Loading" (Skeleton) màu xám nhẹ + Text
+    const placeholder = "data:image/svg+xml,%3Csvg width='800' height='450' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0' stop-color='%23f3f4f6'/%3E%3Cstop offset='0.5' stop-color='%23e5e7eb'/%3E%3Cstop offset='1' stop-color='%23f3f4f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23a)'%3E%3Canimate attributeName='x' from='-100%25' to='100%25' dur='1.5s' repeatCount='indefinite'/%3E%3C/rect%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='20' fill='%239ca3af'%3E%C4%90ang%20t%E1%BA%A3i%20%E1%BA%A3nh...%3C/text%3E%3C/svg%3E";
+
+    // Hàm thay thế ảnh lỗi
+    const replaceWithError = (img) => {
+        // Nếu đã thay thế rồi thì thôi tránh loop
+        if (img.getAttribute('data-replaced')) return;
+        
+        img.src = placeholder;
+        img.removeAttribute('srcset'); // Xóa srcset để tránh trình duyệt cố tải lại ảnh 2x/3x
+        img.setAttribute('data-replaced', 'true');
+        img.classList.add('image-placeholder-active');
+        img.alt = ""; // Alt rỗng cho placeholder trang trí
+        
+        // Giữ layout ổn định
+        if (!img.style.width) img.style.width = '100%';
+        if (!img.style.height) img.style.height = 'auto';
+    };
 
     images.forEach(img => {
-        // 1. Missing src: Set placeholder immediately
-        if (!img.getAttribute('src')) {
-            img.setAttribute('src', placeholder);
-            img.classList.add('image-placeholder-active');
+        // 1. Bắt sự kiện lỗi (nếu lỗi xảy ra sau khi script chạy)
+        img.addEventListener('error', function() {
+            replaceWithError(this);
+        });
+
+        // 2. Kiểm tra các ảnh ĐÃ lỗi (xảy ra trước khi script chạy) hoặc không có src
+        const src = img.getAttribute('src');
+        
+        if (!src || src === '') {
+            replaceWithError(img);
+        } else if (img.complete && img.naturalWidth === 0) {
+            // Ảnh đã "tải xong" nhưng width = 0 nghĩa là lỗi kết nối/404
+            replaceWithError(img);
         }
 
-        // 2. Error loading (404/broken): Swap to placeholder
-        img.onerror = function() {
-            this.onerror = null; // Prevent infinite loop
-            this.src = placeholder;
-            this.alt = "Hình ảnh đang cập nhật";
-            this.classList.add('image-error-active');
-            
-            // Maintain layout stability if possible
-            if (!this.style.width) this.style.width = '100%';
-            if (!this.style.height) this.style.height = 'auto'; // Let aspect ratio take over
-        };
-
-        // 3. Loading State (Optional visual cue)
-        // Add a class while loading, remove on load
-        if (!img.complete) {
+        // 3. Loading state (thêm class để transition mờ dần)
+        if (!img.complete && !img.hasAttribute('data-replaced')) {
             img.classList.add('image-loading');
-        }
-        img.onload = function() {
-            this.classList.remove('image-loading');
+            img.onload = function() {
+                this.classList.remove('image-loading');
+            }
         }
     });
+
+    // Quan trọng: Lắng nghe cả các ảnh load bằng Ajax sau này (nếu có)
+    // Sử dụng MutationObserver để tự động xử lý ảnh mới
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) { // ELEMENT_NODE
+                    if (node.tagName === 'IMG') {
+                        // Attach error connect for new IMG
+                        node.addEventListener('error', function() { replaceWithError(this); });
+                    } else {
+                        // Find imgs inside new node
+                        const nestedImgs = node.querySelectorAll('img');
+                        nestedImgs.forEach(nImg => {
+                             nImg.addEventListener('error', function() { replaceWithError(this); });
+                        });
+                    }
+                }
+            });
+        });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
 });
 
